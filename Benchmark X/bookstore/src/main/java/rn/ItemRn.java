@@ -15,11 +15,36 @@ public class ItemRn {
 	ItemDao itemDao;
 	
 	/**
-	 * Lists products by title, author, sorted by cheapest price and maximum price.
+	 * Lists books by title, author, sorted by cheapest price and maximum price limited by 100.
 	 */
 	public List<ItemApi> list(String title, String author, Boolean sorted, Long maxPrice){	
 		List<Item> list = itemDao.list(title, author, sorted, maxPrice);
 		List<ItemApi> listApi = list.stream().map(i -> convertToApi(i)).collect(Collectors.toList());
+		return listApi;
+	}
+	
+	/**
+	 * Lists the 10 best seller books.  
+	 */
+	public List<ItemApi> listBestSellers(){	
+		List<Item> list = itemDao.listBestSellers();
+		List<ItemApi> listApi = list.stream().map(i -> convertToApi(i)).collect(Collectors.toList());
+		return listApi;
+	}
+	
+	/**
+	 * Lists 5 best sellers books and 10 "you may also like" books. 
+	 */
+	public List<ItemApi> home(){
+		List<Item> items = itemDao.home(customerId);
+	}
+	
+	/**
+	 * Search for a book description.
+	 */
+	public ItemApi productDetail(Long id) {
+		Item item = itemDao.productDetail(id);
+		return convertToApi(item);
 	}
 	
 	private ItemApi convertToApi(Item item) {
@@ -30,7 +55,6 @@ public class ItemRn {
 		api.setPublisher(item.getPublisher());
 		api.setCost(item.getCost());
 		api.setAvailability(item.getAvailability());
-		
 		return api;
 	}
 }

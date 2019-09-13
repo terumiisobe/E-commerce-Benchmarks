@@ -23,21 +23,20 @@ public class ItemRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ItemApi> list(@QueryParam("title") String title, @QueryParam("author") String author, 
 			@QueryParam("sortPrice") Boolean sorted, @QueryParam("maxPrice") Long maxPrice){
-		return null;
+		return itemRn.list(title, author, sorted, maxPrice);
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ItemApi> home(){
+		itemRn.home();
 	}
 	
 	@GET
 	@Path("/best")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ItemApi> listBestSellers(){
-		return null;
-	}
-	
-	@GET
-	@Path("/new")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<ItemApi> listNew(){
-		return null;
+		return itemRn.listBestSellers();
 	}
 	
 	@GET
