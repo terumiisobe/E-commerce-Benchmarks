@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Item {
@@ -13,10 +15,13 @@ public class Item {
 	@GeneratedValue
 	private Long id;
 	private String title;
+	@ManyToOne
+	@JoinColumn(name = "authorId")
 	private Author author;
 	private String publisher;
 	private BigDecimal cost;
 	private Long availability;
+	private Long timesSold;
 	
 	public Long getId() {
 		return id;
@@ -53,5 +58,11 @@ public class Item {
 	}
 	public void setAvailability(Long availability) {
 		this.availability = availability;
+	}
+	public Long getTimesSold() {
+		return timesSold;
+	}
+	public void setTimesSold(Long timesSold) {
+		this.timesSold = timesSold;
 	}
 }

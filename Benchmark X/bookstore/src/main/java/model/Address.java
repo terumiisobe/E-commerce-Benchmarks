@@ -3,6 +3,8 @@ package model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Address {
@@ -13,6 +15,8 @@ public class Address {
 	private String street;
 	private String city;
 	private String state;
+	@ManyToOne
+	@JoinColumn(name = "countryId")
 	private Country country;
 	
 	public Long getId() {

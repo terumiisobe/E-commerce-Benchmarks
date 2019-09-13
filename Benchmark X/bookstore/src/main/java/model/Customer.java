@@ -2,9 +2,12 @@ package model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Customer {
@@ -12,9 +15,12 @@ public class Customer {
 	@Id
 	@GeneratedValue
 	private Long id;
+	@Column(unique = true)
 	private String username;
 	private String password;
 	private String fullName;
+	@ManyToOne
+	@JoinColumn(name = "addressId")
 	private Address address;
 	private String phoneNumber;
 	private String email;
