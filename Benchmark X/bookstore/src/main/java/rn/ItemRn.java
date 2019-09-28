@@ -8,11 +8,15 @@ import javax.inject.Inject;
 import api.ItemApi;
 import dao.ItemDao;
 import model.Item;
+import util.UserSession;
 
 public class ItemRn {
 	
 	@Inject 
 	ItemDao itemDao;
+	
+	@Inject
+	UserSession userSession;
 	
 	/**
 	 * Lists books by title, author, sorted by cheapest price and maximum price limited by 100.
@@ -36,7 +40,13 @@ public class ItemRn {
 	 * Lists 5 best sellers books and 10 "you may also like" books. 
 	 */
 	public List<ItemApi> home(){
-		List<Item> items = itemDao.home(customerId);
+		if(userSession.getCustomerId() == null) {
+			return listBestSellers();
+		}
+		else {
+			return itemDao.listRelatedBooks(userSession.getCustomerId()).stream()
+					.map(this::convertToApi).collect(Collectors.toList());
+		}
 	}
 	
 	/**

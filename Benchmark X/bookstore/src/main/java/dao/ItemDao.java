@@ -7,16 +7,17 @@ import java.util.stream.Collectors;
 
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import model.Author;
-import model.Customer;
 import model.Item;
 
 @Stateful
 public class ItemDao {
 	
-	private EntityManager em;
+	@PersistenceContext
+	EntityManager em;
 	
 	public Item searchById(Long id) {
 		StringBuilder sb = new StringBuilder();

@@ -30,6 +30,7 @@ public class ItemRest {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ItemApi> home(){
 		itemRn.home();
+		return null;
 	}
 	
 	@GET
