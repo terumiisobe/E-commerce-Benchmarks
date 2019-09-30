@@ -5,9 +5,13 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import api.HomeApi;
 import api.ItemApi;
+import dao.CustomerDao;
 import dao.ItemDao;
+import model.Customer;
 import model.Item;
+import util.EnumSearchType;
 import util.UserSession;
 
 public class ItemRn {
@@ -16,41 +20,55 @@ public class ItemRn {
 	ItemDao itemDao;
 	
 	@Inject
+	CustomerDao customerDao;
+	
+	@Inject
 	UserSession userSession;
 	
 	/**
-	 * Lists books by title, author, sorted by cheapest price and maximum price limited by 100.
+	 * Searches for item that match the parameters up to 50 items.
 	 */
-	public List<ItemApi> list(String title, String author, Boolean sorted, Long maxPrice){	
-		List<Item> list = itemDao.list(title, author, sorted, maxPrice);
+	public List<ItemApi> search(EnumSearchType searchType, String searchText){	
+		List<Item> list = itemDao.search(searchType, searchText);
 		List<ItemApi> listApi = list.stream().map(i -> convertToApi(i)).collect(Collectors.toList());
 		return listApi;
 	}
 	
 	/**
-	 * Lists the 10 best seller books.  
+	 * Lists the first 50 items from a subject sorted by ascending title.  
 	 */
-	public List<ItemApi> listBestSellers(){	
-		List<Item> list = itemDao.listBestSellers();
+	public List<ItemApi> bestSellers(String subject){	
+		List<Item> list = itemDao.bestSellers(subject);
+		List<ItemApi> listApi = list.stream().map(i -> convertToApi(i)).collect(Collectors.toList());		
+		return listApi;
+	}
+	
+	/**
+	 * Lists the first 50 items from a subject sorted by descending publication date and ascending title.  
+	 */
+	public List<ItemApi> newProducts(String subject){	
+		List<Item> list = itemDao.newProducts(subject);
 		List<ItemApi> listApi = list.stream().map(i -> convertToApi(i)).collect(Collectors.toList());
 		return listApi;
 	}
 	
 	/**
-	 * Lists 5 best sellers books and 10 "you may also like" books. 
+	 * Lists all subjects for best sellers and new items, and the name of the customer if registered.
 	 */
-	public List<ItemApi> home(){
-		if(userSession.getCustomerId() == null) {
-			return listBestSellers();
+	public HomeApi home(){
+		HomeApi api = new HomeApi();
+		if(userSession.getCustomerId() != null) {
+			Customer customer = customerDao.searchById(userSession.getCustomerId());
+			api.setCustomerName(customer.getFullName());
 		}
-		else {
-			return itemDao.listRelatedBooks(userSession.getCustomerId()).stream()
-					.map(this::convertToApi).collect(Collectors.toList());
-		}
+		List<String> subjectList = itemDao.getSubjects();
+		api.setBestSellers(subjectList);
+		api.setWhatsNew(subjectList);
+		return api;
 	}
 	
 	/**
-	 * Search for a book description.
+	 * Search for an item detail.
 	 */
 	public ItemApi productDetail(Long id) {
 		Item item = itemDao.productDetail(id);

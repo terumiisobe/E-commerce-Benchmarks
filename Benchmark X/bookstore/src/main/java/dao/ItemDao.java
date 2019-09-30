@@ -1,17 +1,14 @@
 package dao;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import model.Author;
 import model.Item;
+import util.EnumSearchType;
 
 @Stateful
 public class ItemDao {
@@ -28,59 +25,54 @@ public class ItemDao {
 		return query.getSingleResult();
 	}
 	
-	public List<Item> list(String title, String author, Boolean sorted, Long maxPrice){		
+	public List<Item> search(EnumSearchType searchType, String searchText){		
 		StringBuilder sb = new StringBuilder();
-		Map<String, Object> parameters = new HashMap<>();
 		sb.append("select i from Item i ");
-		sb.append("where 1=1 ");
-		if(title != null) {
-			sb.append("and i.title like :title ");
-			parameters.put("title", title);
-		}
-		if(author != null) {
-			sb.append("and i.author like :author ");
-			parameters.put("author", author);
-		}
-		if(maxPrice != null) {
-			sb.append("and i.cost <= :maxPrice ");
-			parameters.put("maxPrice", maxPrice);
-		}
-		if(sorted != null) {
-			sb.append("order by i.cost ");
+		switch(searchType) {
+		case AUTHOR:
+			sb.append("where i.author.fullName = :searchText ");
+			break;
+		case TITLE:
+			sb.append("where i.title = :searchText ");
+			break;
+		case SUBJECT:
+			sb.append("where i.subject = :searchText ");
+			break;
 		}
 		TypedQuery<Item> query = em.createQuery(sb.toString(), Item.class);
+		query.setParameter("searchText", searchText);
+		query.setMaxResults(50);
 		return query.getResultList();
 	}
 	
-	public List<Item> listBestSellers(){		
+	public List<Item> bestSellers(String subject){		
 		StringBuilder sb = new StringBuilder();
 		sb.append("select i from Item i ");
-		sb.append("order by timesSold desc ");
+		sb.append("where i.subject = :subject ");
+		sb.append("order by i.title asc ");
 		TypedQuery<Item> query = em.createQuery(sb.toString(), Item.class);
-		query.setMaxResults(10);
+		query.setParameter("subject", subject);
+		query.setMaxResults(50);
 		return query.getResultList();
 	}
 	
-	public List<Item> listRelatedBooks(Long customerId){		
+	public List<Item> newProducts(String subject){		
 		StringBuilder sb = new StringBuilder();
-		sb.append("select a from OrderLine ol ");
-		sb.append("join ol.order o ");
-		sb.append("join o.customer c ");
-		sb.append("join ol.item i ");
-		sb.append("join i.author a ");
-		sb.append("where c.id = :customerId ");
-		TypedQuery<Author> authorQuery = em.createQuery(sb.toString(), Author.class);
-		authorQuery.setParameter("customerId", customerId);
-		List<Long> authors = authorQuery.getResultList().stream().map(a -> a.getId()).collect(Collectors.toList());
-		
-		sb = new StringBuilder();
-		sb.append("select i from Item ");
-		sb.append("join i.author a ");
-		sb.append("where a.id in :authors ");
-		TypedQuery<Item> itemQuery = em.createQuery(sb.toString(), Item.class);
-		itemQuery.setParameter("authors", authors);
-		itemQuery.setMaxResults(10);
-		return itemQuery.getResultList();
+		sb.append("select i from Item i ");
+		sb.append("where i.subject = :subject ");
+		sb.append("order by i.publicationDate desc, ");
+		sb.append("i.title asc ");
+		TypedQuery<Item> query = em.createQuery(sb.toString(), Item.class);
+		query.setParameter("subject", subject);
+		query.setMaxResults(50);
+		return query.getResultList();
+	}
+	
+	public List<String> getSubjects() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("select distinct subject from Item i ");
+		TypedQuery<String> query = em.createQuery(sb.toString(), String.class);
+		return query.getResultList();
 	}
 	
 	public Item productDetail(Long id) {

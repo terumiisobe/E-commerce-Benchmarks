@@ -10,41 +10,60 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import api.HomeApi;
 import api.ItemApi;
 import rn.ItemRn;
+import util.EnumSearchType;
 
 @Path("/item")
+@Produces(MediaType.APPLICATION_JSON)
 public class ItemRest {
 	
 	@Inject 
 	ItemRn itemRn;
-	
+		
+	/**
+	 * Search
+	 */
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<ItemApi> list(@QueryParam("title") String title, @QueryParam("author") String author, 
-			@QueryParam("sortPrice") Boolean sorted, @QueryParam("maxPrice") Long maxPrice){
-		return itemRn.list(title, author, sorted, maxPrice);
+	public List<ItemApi> search(@QueryParam("searchType") EnumSearchType searchType, @QueryParam("searchText") String searchText){
+		return itemRn.search(searchType, searchText);
+	}
+		
+	/**
+	 * Home
+	 */
+	@GET
+	@Path("/home")
+	public HomeApi home(){
+		return itemRn.home();
 	}
 	
+	/**
+	 * Best Sellers
+	 */
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<ItemApi> home(){
-		itemRn.home();
-		return null;
+	@Path("/best/{subject}")
+	public List<ItemApi> bestSellers(@PathParam("subject") String subject){
+		return itemRn.bestSellers(subject);
 	}
 	
+	/**
+	 * New Products
+	 */
 	@GET
-	@Path("/best")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<ItemApi> listBestSellers(){
-		return itemRn.listBestSellers();
+	@Path("/new/{subject}")
+	public List<ItemApi> newProducts(@PathParam("subject") String subject){
+		return itemRn.newProducts(subject);
 	}
 	
+	/**
+	 * Product Detail
+	 */
 	@GET
 	@Path("{id}")
-	@Produces(MediaType.APPLICATION_JSON)
 	public ItemApi productDetail(@PathParam("id") Long id) {
-		return null;
+		return itemRn.productDetail(id);
 	}
 
 }
