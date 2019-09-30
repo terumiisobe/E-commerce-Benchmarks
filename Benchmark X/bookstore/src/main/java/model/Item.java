@@ -1,6 +1,7 @@
 package model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +21,9 @@ public class Item {
 	@ManyToOne
 	@JoinColumn(name = "authorId")
 	private Author author;
+	private String subject;
 	private String publisher;
+	private Date publicationDate;
 	private BigDecimal cost;
 	private Long availability;
 	private Long timesSold;
@@ -43,11 +46,23 @@ public class Item {
 	public void setAuthor(Author author) {
 		this.author = author;
 	}
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 	public String getPublisher() {
 		return publisher;
 	}
 	public void setPublisher(String publisher) {
 		this.publisher = publisher;
+	}
+	public Date getPublishDate() {
+		return publicationDate;
+	}
+	public void setPublishDate(Date publishDate) {
+		this.publicationDate = publishDate;
 	}
 	public BigDecimal getCost() {
 		return cost;
