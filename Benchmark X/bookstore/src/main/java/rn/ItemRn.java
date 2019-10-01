@@ -12,7 +12,7 @@ import dao.ItemDao;
 import model.Customer;
 import model.Item;
 import util.EnumSearchType;
-import util.UserSession;
+import util.ShoppingSession;
 
 public class ItemRn {
 	
@@ -23,7 +23,7 @@ public class ItemRn {
 	CustomerDao customerDao;
 	
 	@Inject
-	UserSession userSession;
+	ShoppingSession userSession;
 	
 	/**
 	 * Searches for item that match the parameters up to 50 items.
