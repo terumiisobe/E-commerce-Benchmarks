@@ -2,7 +2,7 @@ package util;
 
 import java.util.Date;
 
-public class UserSession {
+public class ShoppingSession {
 	private Long customerId;
 	private Date loginTime;
 	
