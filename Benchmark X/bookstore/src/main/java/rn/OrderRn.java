@@ -5,7 +5,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import api.ItemApi;
 import api.OrderApi;
+import api.RegistrationApi;
 import dao.CustomerDao;
 import dao.ItemDao;
 import dao.OrderDao;
@@ -14,7 +16,7 @@ import model.Item;
 import model.Order;
 import model.OrderLine;
 import util.EnumOrderStatus;
-import util.UserSession;
+import util.ShoppingSession;
 
 public class OrderRn {
 	
@@ -28,16 +30,32 @@ public class OrderRn {
 	ItemDao itemDao;
 	
 	@Inject
-	UserSession userSession;
+	ShoppingSession shoppingSession;
 	
 	/**
 	 * Register an user by performing log in.
 	 */
-	public void register(String username, String password) {
-		Customer customer = customerDao.fetchCustomer(username);
-		if(customer.getPassword() == password) {
-			userSession.setCustomerId(customer.getId());
-			userSession.setLoginTime(new Date());
+	public void customerRegistration(Boolean returningCustomer, String username, String password, 
+			RegistrationApi registration) {
+		if(returningCustomer) {
+			Customer customer = customerDao.fetchCustomer(username);
+			if(customer.getPassword() != password) {
+				return;
+			}
+			shoppingSession.setCustomerId(customer.getId());
+			shoppingSession.setLoginTime(new Date());
+		}
+		else{
+			// Not sure if new customers will be implemented
+//			Customer newCustomer = new Customer();
+//			// generates random username
+//			// generates random password
+//			newCustomer.setFullName(registration.getFullName());
+//			newCustomer.setAddress(registration.getAddress());
+//			newCustomer.setPhoneNumber(registration.getPhoneNumber());
+//			newCustomer.setEmail(registration.getEmail());
+//			newCustomer.setBirthDate(registration.getBirthDate());
+//			customerDao.persistCustomer(newCustomer);
 		}
 	}
 	
@@ -45,7 +63,7 @@ public class OrderRn {
 	 * Checks if the user logged in.
 	 */
 	public boolean userIsLoggedIn() {
-		if(userSession.getCustomerId() == null || userSession.getLoginTime() == null) {
+		if(shoppingSession.getCustomerId() == null || shoppingSession.getLoginTime() == null) {
 			return false;
 		}
 		return true;
@@ -55,11 +73,12 @@ public class OrderRn {
 	 * Adds product to shopping cart. (*needs registration*)
 	 * If the customer doesn't have a pending order, create a new one.
 	 */
-	public void shoppingCart(Long productId) {
+	public void shoppingCart(Boolean addFlag, List<ItemApi> items) {
 		if(!userIsLoggedIn()) {
 			return;
 		}
-		Customer customer = customerDao.searchById(userSession.getCustomerId());
+		Customer customer = customerDao.searchById(shoppingSession.getCustomerId());
+		
 		Item item = itemDao.searchById(productId);
 		Order order = orderDao.fetchOrder(customer.getId());
 		if(item.getAvailability() < 1) {
@@ -98,7 +117,7 @@ public class OrderRn {
 		if(!userIsLoggedIn()) {
 			return;
 		}
-		Order order = orderDao.fetchOrder(userSession.getCustomerId());
+		Order order = orderDao.fetchOrder(shoppingSession.getCustomerId());
 		if(order == null) {
 			return;
 		}
@@ -123,5 +142,28 @@ public class OrderRn {
 		api.setStatus(order.getStatus());
 		api.setTotal(order.getTotal());
 		return api;
+	}
+	
+	/**
+	 * Executes algorithm DigSyl.
+	 */
+	private String generateRandomString(Long d, Integer n) {
+		String result = "";
+		String[] digits = new String[10];
+		digits[0] = "BA";
+		digits[1] = "OG";
+		digits[2] = "AL";
+		digits[3] = "RI";
+		digits[4] = "RE";
+		digits[5] = "SE";
+		digits[6] = "AT";
+		digits[7] = "UL";
+		digits[8] = "IN";
+		digits[9] = "NG";
+		char[] dChar = d.toString().toCharArray();
+		for(char c : dChar) {
+			result += digits[Character.getNumericValue(c)];
+		}
+		return result;
 	}
 }

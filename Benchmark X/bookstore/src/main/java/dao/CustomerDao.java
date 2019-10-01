@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import model.Customer;
+import model.Order;
 
 public class CustomerDao {
 	
@@ -26,5 +27,8 @@ public class CustomerDao {
 		query.setParameter("username", username);
 		return query.getSingleResult();
 	}
-
+	
+	public void persistCustomer(Customer customer) {
+		em.persist(customer);
+	}
 }
