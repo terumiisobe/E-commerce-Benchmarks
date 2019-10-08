@@ -1,18 +1,19 @@
+INSERT INTO country(id, name) VALUES (1, 'Brazil');
 
--- Reconstruction
---INSERT INTO UltrasoundImage (userId, fileReference, reconstructionStartTime, reconstructionEndTime, size, iterationsPerformed) VALUES (1, 'filename', CURRENT_DATE, CURRENT_DATE, 1024, 50);
---INSERT INTO User (userId, username) VALUES (1, 'fenix');
+INSERT INTO address(id, street, city, state, countryId) VALUES (1, 'Rua Carneiro Lobo', 'Curitiba', 'Parana', 1);
 
---INSERT INTO Item(id, title, author, publisher, cost, availability, timesSold)
---VALUES (1L, 'The Name of the Wind', 'Patrick Rothfuss', 'Sextante', 80, 150L, 0L);
---VALUES (2L, 'The Game of Thrones', 'George R. R. Martin', 'Sextante', 90, 200L, 0L);
---VALUES (3L, 'Lord of the Rings', 'J. R. R. Tolkien', 'Sextante', 50, 130L, 0L);
+INSERT INTO customer(id, birthDate, email, fullName, password, phoneNumber, username, addressId) VALUES (1000, NULL, NULL, 'Terumi Isobe', 'password', NULL, 'terumiisobe', 1);
+INSERT INTO customer(id, birthDate, email, fullName, password, phoneNumber, username, addressId) VALUES (1001, NULL, NULL, 'João Grams', 'password', NULL, 'joaograms', 1);
 
+INSERT INTO author(id, fullName) VALUES (1, 'Patrick Rothfuss');
+INSERT INTO author(id, fullName) VALUES (2, 'George R. R. Martin');
+INSERT INTO author(id, fullName) VALUES (3, 'J. R. R. Tolkien');
+INSERT INTO author(id, fullName) VALUES (4, 'John Green');
+INSERT INTO author(id, fullName) VALUES (5, 'Stephen King');
 
-INSERT INTO Author
-(id, fullName)
-VALUES(1L, 'Patrick Rothfuss');
-
-INSERT INTO Item
-(id, availability, cost, publisher, timesSold, title, authorId)
-VALUES(1L, 150L, 80, 'Sextante', 0L, 'The Name of the Wind', 1L);
+INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (1, 'The Name of the Wind', 1,'SCIENCE FICTION', NULL, CURRENT_TIMESTAMP, 80, 15);
+INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (2, 'The Game of Thrones', 2,'SCIENCE FICTION', NULL, CURRENT_TIMESTAMP, 90, 10);
+INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (3, 'Lord of the Rings', 3,'SCIENCE FICTION', NULL, CURRENT_TIMESTAMP, 80, 5);
+INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (4, 'The Fault in our Stars', 4, 'ROMANCE', NULL, CURRENT_TIMESTAMP, 50, 2);
+INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (5, 'Paper Towns', 4, 'ROMANCE', NULL, CURRENT_TIMESTAMP, 30, 3);
+INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (6, 'It', 5, 'HORROR', NULL, CURRENT_TIMESTAMP, 70, 10);
