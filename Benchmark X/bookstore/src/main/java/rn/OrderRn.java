@@ -1,13 +1,17 @@
 package rn;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import api.ItemApi;
+import api.ItemQuantityApi;
 import api.OrderApi;
 import api.RegistrationApi;
+import api.ShoppingCartApi;
 import dao.CustomerDao;
 import dao.ItemDao;
 import dao.OrderDao;
@@ -16,6 +20,7 @@ import model.Item;
 import model.Order;
 import model.OrderLine;
 import util.EnumOrderStatus;
+import util.ItemQuantity;
 import util.ShoppingSession;
 
 public class OrderRn {
@@ -27,35 +32,40 @@ public class OrderRn {
 	CustomerDao customerDao;
 	
 	@Inject
-	ItemDao itemDao;
+	ItemRn itemRn;
 	
 	@Inject
-	ShoppingSession shoppingSession;
+	ItemDao itemDao;
+	
+//	@Inject
+//	ShoppingSession shoppingSession;
 	
 	/**
 	 * Register an user by performing log in.
 	 */
 	public void customerRegistration(Boolean returningCustomer, String username, String password, 
 			RegistrationApi registration) {
+		ShoppingSession shoppingSession = ShoppingSession.getInstance();
 		if(returningCustomer) {
 			Customer customer = customerDao.fetchCustomer(username);
-			if(customer.getPassword() != password) {
+			if(customer == null || !customer.getPassword().equals(password)) {
 				return;
 			}
 			shoppingSession.setCustomerId(customer.getId());
 			shoppingSession.setLoginTime(new Date());
+			shoppingSession.setCart(new ArrayList<>());
 		}
 		else{
-			// Not sure if new customers will be implemented
-//			Customer newCustomer = new Customer();
-//			// generates random username
-//			// generates random password
-//			newCustomer.setFullName(registration.getFullName());
-//			newCustomer.setAddress(registration.getAddress());
-//			newCustomer.setPhoneNumber(registration.getPhoneNumber());
-//			newCustomer.setEmail(registration.getEmail());
-//			newCustomer.setBirthDate(registration.getBirthDate());
-//			customerDao.persistCustomer(newCustomer);
+			// TODO: decide if new customers will be implemented
+			Customer newCustomer = new Customer();
+			newCustomer.setUsername(Long.toString(System.currentTimeMillis()));
+			newCustomer.setPassword("password");
+			newCustomer.setFullName(registration.getFullName());
+			newCustomer.setAddress(registration.getAddress());
+			newCustomer.setPhoneNumber(registration.getPhoneNumber());
+			newCustomer.setEmail(registration.getEmail());
+			newCustomer.setBirthDate(registration.getBirthDate());
+			customerDao.persistCustomer(newCustomer);
 		}
 	}
 	
@@ -63,68 +73,122 @@ public class OrderRn {
 	 * Checks if the user logged in.
 	 */
 	public boolean userIsLoggedIn() {
-		if(shoppingSession.getCustomerId() == null || shoppingSession.getLoginTime() == null) {
+		if(ShoppingSession.getInstance().getCustomerId() == null) {
 			return false;
 		}
 		return true;
 	}
 	
 	/**
-	 * Adds product to shopping cart. (*needs registration*)
-	 * If the customer doesn't have a pending order, create a new one.
+	 * Adds product to shopping cart. 
+	 * (*needs registration*)
 	 */
-	public void shoppingCart(Boolean addFlag, List<ItemApi> items) {
+	public ShoppingCartApi shoppingCart(Boolean addFlag, HashMap<Long, Integer> items) {
 		if(!userIsLoggedIn()) {
-			return;
+			return null;
 		}
-		Customer customer = customerDao.searchById(shoppingSession.getCustomerId());
-		
-		Item item = itemDao.searchById(productId);
-		Order order = orderDao.fetchOrder(customer.getId());
-		if(item.getAvailability() < 1) {
-			return;
+		// if ADD and the cart is not full
+		if(addFlag && ShoppingSession.getInstance().getCart().size() < 100) {
+			for(Long itemId : items.keySet()) {
+				if(itemDao.searchById(itemId).getAvailability() <= 0) {
+					return null;
+				}
+				List<ItemQuantity> list = ShoppingSession.getInstance().getCart();
+				Boolean itemExist = false;
+				for(ItemQuantity iq : list) {
+					// if item already exists in cart
+					if(iq.getItem().getId() == itemId) {
+						iq.setQuantity(items.get(itemId));
+						itemExist = true;
+					}
+				}
+				//if item doesn't exist in cart
+				if(!itemExist) {
+					ItemQuantity newItem = new ItemQuantity();
+					newItem.setItem(itemDao.searchById(itemId));
+					newItem.setQuantity(items.get(itemId));
+					ShoppingSession.getInstance().getCart().add(newItem);
+				}
+			}
 		}
-		item.setAvailability(item.getAvailability() - 1);
-		if(order == null) {
-			order = new Order();
-			order.setCustomer(customer);
-			order.setDate(new Date());
-			order.setStatus(EnumOrderStatus.PENDING);
-			order.setTotal(item.getCost());
-		} else {
-			order.setTotal(order.getTotal().add(item.getCost()));
-		}
-		OrderLine orderLine = generateOrderLine(order, item);
-		orderDao.persistOrder(order);
-		orderDao.persistOrderLine(orderLine);
+		ShoppingCartApi api = new ShoppingCartApi();
+		List<ItemQuantity> cart = ShoppingSession.getInstance().getCart();
+		api.setCart(convertToApi(cart));
+		api.setTotalPrice(calculateTotalPrice(cart));
+		return api;
 	}
 	
 	/**
-	 * Generates an order line between an order from a customer and an item.
+	 * Calculates total price in shopping cart.
 	 */
-	private OrderLine generateOrderLine(Order order, Item item) {
-		OrderLine orderLine = new OrderLine();
-		orderLine.setItem(item);
-		orderLine.setOrder(order);
-		return orderLine;
+	private BigDecimal calculateTotalPrice(List<ItemQuantity> cart) {
+		BigDecimal totalPrice = new BigDecimal(0);
+		BigDecimal price = new BigDecimal(0);
+		for(ItemQuantity iq : ShoppingSession.getInstance().getCart()) {
+			price = iq.getItem().getCost().multiply(new BigDecimal(iq.getQuantity())); 
+			totalPrice = totalPrice.add(price);
+		}
+		return totalPrice;
 	}
 	
 	/**
-	 * Process a buy request by incrementing the timesSold of each item and 
-	 * setting the order status to FINISHED.
+	 * Converts List<ItemQuantity> in List<ItemQuantityApi>.
 	 */
-	public void buyRequest() {
+	private List<ItemQuantityApi> convertToApi(List<ItemQuantity> entity){
+		List<ItemQuantityApi> api = new ArrayList<>();
+		for(ItemQuantity item : entity) {
+			ItemQuantityApi itemApi = new ItemQuantityApi();
+			itemApi.setItem(itemRn.convertToApi(item.getItem()));
+			itemApi.setQuantity(item.getQuantity());
+			api.add(itemApi);
+		}
+		return api;
+	}
+	
+	/**
+	 * Process a buy request and shows the buy confirmation. 
+	 * (*needs registration*)
+	 */
+	public OrderApi buyConfirm() {
 		if(!userIsLoggedIn()) {
-			return;
+			return null;
 		}
-		Order order = orderDao.fetchOrder(shoppingSession.getCustomerId());
-		if(order == null) {
-			return;
+		if(ShoppingSession.getInstance().getCart().isEmpty()) {
+			return null;
 		}
-		List<OrderLine> orderLineList = orderDao.fetchOrderLine(order.getId());
-		orderLineList.stream().forEach(ol -> ol.getItem().setTimesSold(ol.getItem().getTimesSold() + 1));
+		Order order = new Order();
+		order.setCustomer(customerDao.searchById(ShoppingSession.getInstance().getCustomerId()));
+		order.setDate(new Date());
+		order.setTotal(calculateTotalPrice(ShoppingSession.getInstance().getCart()));
 		order.setStatus(EnumOrderStatus.FINISHED);
 		orderDao.persistOrder(order);
+		for(ItemQuantity item : ShoppingSession.getInstance().getCart()) {
+			if(itemDao.searchById(item.getItem().getId()).getAvailability() <= 0) {
+				return null;
+			}
+			OrderLine line = new OrderLine();
+			line.setQuantity(item.getQuantity());
+			line.setOrder(order);
+			line.setItem(item.getItem());
+			orderDao.persistOrderLine(line);
+		}
+		decreaseAvailability(ShoppingSession.getInstance().getCart());
+		ShoppingSession.getInstance().getCart().clear();
+		return convertToApi(order);
+	}
+	
+	/**
+	 * Decreases items availability.
+	 */
+	private void decreaseAvailability(List<ItemQuantity> list) {
+		for(ItemQuantity iq : list) {
+			Item item = itemDao.searchById(iq.getItem().getId());
+			item.setAvailability(item.getAvailability() - iq.getQuantity());
+			if(item.getAvailability() < 0) {
+				item.setAvailability(0);
+			}
+			itemDao.persistItem(item);
+		}
 	}
 	
 	/**
@@ -135,12 +199,23 @@ public class OrderRn {
 		return convertToApi(order);
 	}
 	
+	/**
+	 * Converts Order to OrderApi.
+	 */
 	private OrderApi convertToApi(Order order) {
 		OrderApi api = new OrderApi();
 		api.setId(order.getId());
 		api.setDate(order.getDate());
-		api.setStatus(order.getStatus());
-		api.setTotal(order.getTotal());
+		api.setTotalPrice(order.getTotal());
+		List<OrderLine> orderLines = orderDao.searchOrderLineByOrder(order.getId());
+		List<ItemQuantityApi> items = new ArrayList<>();
+		for(OrderLine line : orderLines) {
+			ItemQuantityApi itemApi = new ItemQuantityApi();
+			itemApi.setItem(itemRn.convertToApi(line.getItem()));
+			itemApi.setQuantity(line.getQuantity());
+			items.add(itemApi);
+		}
+		api.setItems(items);
 		return api;
 	}
 	
