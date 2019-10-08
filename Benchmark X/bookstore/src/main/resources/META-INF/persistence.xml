@@ -10,9 +10,9 @@
 		<jta-data-source>java:jboss/datasources/benmk1</jta-data-source>
 		<properties>
 			<!-- Properties for Hibernate -->
-			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
 			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
 		</properties>
 	</persistence-unit>
 </persistence>
