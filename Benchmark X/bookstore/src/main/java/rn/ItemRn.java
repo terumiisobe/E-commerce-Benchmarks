@@ -22,9 +22,6 @@ public class ItemRn {
 	@Inject
 	CustomerDao customerDao;
 	
-	@Inject
-	ShoppingSession userSession;
-	
 	/**
 	 * Searches for item that match the parameters up to 50 items.
 	 */
@@ -57,8 +54,8 @@ public class ItemRn {
 	 */
 	public HomeApi home(){
 		HomeApi api = new HomeApi();
-		if(userSession.getCustomerId() != null) {
-			Customer customer = customerDao.searchById(userSession.getCustomerId());
+		if(ShoppingSession.getInstance().getCustomerId() != null) {
+			Customer customer = customerDao.searchById(ShoppingSession.getInstance().getCustomerId());
 			api.setCustomerName(customer.getFullName());
 		}
 		List<String> subjectList = itemDao.getSubjects();
@@ -75,11 +72,13 @@ public class ItemRn {
 		return convertToApi(item);
 	}
 	
-	private ItemApi convertToApi(Item item) {
+	public ItemApi convertToApi(Item item) {
 		ItemApi api = new ItemApi();
 		api.setId(item.getId());
 		api.setTitle(item.getTitle());
 		api.setAuthor(item.getAuthor().getFullName());
+		api.setSubject(item.getSubject());
+		api.setPublicationDate(item.getPublishDate());
 		api.setPublisher(item.getPublisher());
 		api.setCost(item.getCost());
 		api.setAvailability(item.getAvailability());
