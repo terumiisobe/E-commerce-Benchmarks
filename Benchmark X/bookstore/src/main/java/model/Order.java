@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import util.EnumOrderStatus;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orderRegister")
 public class Order {
 	
 	@Id
@@ -23,7 +23,7 @@ public class Order {
 	@JoinColumn(name = "customerId")
 	private Customer customer;
 	private Date date;
-	private BigDecimal total;
+	private BigDecimal totalPrice;
 	private EnumOrderStatus status;
 	
 	public Long getId() {
@@ -45,10 +45,10 @@ public class Order {
 		this.date = date;
 	}
 	public BigDecimal getTotal() {
-		return total;
+		return totalPrice;
 	}
 	public void setTotal(BigDecimal total) {
-		this.total = total;
+		this.totalPrice = total;
 	}
 	public EnumOrderStatus getStatus() {
 		return status;

@@ -19,6 +19,7 @@ public class OrderLine {
 	@OneToOne
 	@JoinColumn(name = "itemId")
 	private Item item;
+	private Integer quantity;
 	
 	public Long getId() {
 		return id;
@@ -37,5 +38,11 @@ public class OrderLine {
 	}
 	public void setItem(Item item) {
 		this.item = item;
+	}
+	public Integer getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 }

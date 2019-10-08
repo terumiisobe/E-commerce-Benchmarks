@@ -25,8 +25,7 @@ public class Item {
 	private String publisher;
 	private Date publicationDate;
 	private BigDecimal cost;
-	private Long availability;
-	private Long timesSold;
+	private Integer availability;
 	
 	public Long getId() {
 		return id;
@@ -70,16 +69,10 @@ public class Item {
 	public void setCost(BigDecimal cost) {
 		this.cost = cost;
 	}
-	public Long getAvailability() {
+	public Integer getAvailability() {
 		return availability;
 	}
-	public void setAvailability(Long availability) {
+	public void setAvailability(Integer availability) {
 		this.availability = availability;
-	}
-	public Long getTimesSold() {
-		return timesSold;
-	}
-	public void setTimesSold(Long timesSold) {
-		this.timesSold = timesSold;
 	}
 }
