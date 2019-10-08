@@ -18,7 +18,7 @@ public class ItemDao {
 	
 	public Item searchById(Long id) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select i from Item ");
+		sb.append("select i from Item i ");
 		sb.append("where i.id = :id ");
 		TypedQuery<Item> query = em.createQuery(sb.toString(), Item.class);
 		query.setParameter("id", id);
@@ -82,5 +82,9 @@ public class ItemDao {
 		TypedQuery<Item> query = em.createQuery(sb.toString(), Item.class);
 		query.setParameter("id", id);
 		return query.getSingleResult();
+	}
+	
+	public void persistItem(Item item) {
+		em.merge(item);
 	}
 }
