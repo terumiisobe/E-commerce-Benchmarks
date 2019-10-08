@@ -1,6 +1,6 @@
 package rest;
 
-import java.util.List;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -8,15 +8,17 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import api.ItemApi;
 import api.OrderApi;
 import api.RegistrationApi;
+import api.ShoppingCartApi;
 import rn.OrderRn;
 
 @Path("/order")
+@Produces("application/json")
 public class OrderRest {
 	
 	@Inject
@@ -37,18 +39,18 @@ public class OrderRest {
 	 * Shopping Cart
 	 */
 	@PUT
-	public Response shoppingCart(@QueryParam("addFlag") Boolean addFlag, List<ItemApi> items) {
-		orderRn.shoppingCart(id);
-		return null;
+	public Response shoppingCart(@QueryParam("addFlag") Boolean addFlag, HashMap<Long, Integer> item) {
+		ShoppingCartApi api = orderRn.shoppingCart(addFlag, item);
+		return Response.status(Response.Status.OK).entity(api).build();
 	}
 	
 	/**
-	 * Buy Request
+	 * Buy Confirm
 	 */
 	@POST 
-	public Response buyRequest() {
-		orderRn.buyRequest();
-		return null;
+	public Response buyConfirm() {
+		OrderApi api = orderRn.buyConfirm();
+		return Response.status(Response.Status.OK).entity(api).build();
 	}
 	
 	/**

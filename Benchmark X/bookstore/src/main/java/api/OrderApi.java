@@ -2,15 +2,14 @@ package api;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
-import util.EnumOrderStatus;
+import java.util.List;
 
 public class OrderApi {
 	
 	private Long id;
 	private Date date;
-	private BigDecimal total;
-	private EnumOrderStatus status;
+	private BigDecimal totalPrice;
+	private List<ItemQuantityApi> items;
 	
 	public Long getId() {
 		return id;
@@ -24,16 +23,16 @@ public class OrderApi {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public BigDecimal getTotal() {
-		return total;
+	public BigDecimal getTotalPrice() {
+		return totalPrice;
 	}
-	public void setTotal(BigDecimal total) {
-		this.total = total;
+	public void setTotalPrice(BigDecimal total) {
+		this.totalPrice = total;
 	}
-	public EnumOrderStatus getStatus() {
-		return status;
+	public List<ItemQuantityApi> getItems() {
+		return items;
 	}
-	public void setStatus(EnumOrderStatus status) {
-		this.status = status;
+	public void setItems(List<ItemQuantityApi> items) {
+		this.items = items;
 	}	
 }
