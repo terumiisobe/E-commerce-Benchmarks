@@ -8,7 +8,7 @@
 	<artifactId>bookstore</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>Cerebro</name>
+	<name>Bookstore</name>
 	<description>Projeto Bookstore, benchmark X, realizado para a disciplina de TCC na UTFPR</description>
 
 	<url>https://github.com/renato-bohler/sistemas-distribuidos</url>
@@ -36,8 +36,8 @@
 		<version.war.plugin>2.5</version.war.plugin>
 
 		<!-- maven-compiler-plugin -->
-		<maven.compiler.target>1.7</maven.compiler.target>
-		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
 	</properties>
 
 
@@ -179,25 +179,20 @@
 			<artifactId>swagger-jaxrs</artifactId>
 			<version>1.5.7</version>
 		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/org.jblas/jblas -->
-		<dependency>
-		    <groupId>org.jblas</groupId>
-		    <artifactId>jblas</artifactId>
-		    <version>1.2.4</version>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/com.sun.jersey/jersey-client -->
-		<dependency>
-		    <groupId>com.sun.jersey</groupId>
-		    <artifactId>jersey-client</artifactId>
-		    <version>1.19.4</version>
-		</dependency>
+
 		<dependency>
 		  <groupId>org.ejml</groupId>
 		  <artifactId>ejml-all</artifactId>
 		  <version>0.37.1</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/javax.transaction/javax.transaction-api -->
+		<dependency>
+		    <groupId>javax.transaction</groupId>
+		    <artifactId>javax.transaction-api</artifactId>
+		    <version>1.2</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -244,37 +239,6 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-
-		<profile>
-
-			<!-- An optional Arquillian testing profile that executes tests in your 
-				WildFly instance -->
-			<!-- This profile will start a new WildFly instance, and execute the test, 
-				shutting it down when done -->
-			<!-- Run with: mvn clean test -Parq-wildfly-managed -->
-			<id>arq-wildfly-managed</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.wildfly</groupId>
-					<artifactId>wildfly-arquillian-container-managed</artifactId>
-					<scope>test</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-
-		<profile>
-			<!-- An optional Arquillian testing profile that executes tests in a remote 
-				WildFly instance -->
-			<!-- Run with: mvn clean test -Parq-wildfly-remote -->
-			<id>arq-wildfly-remote</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.wildfly</groupId>
-					<artifactId>wildfly-arquillian-container-remote</artifactId>
-					<scope>test</scope>
-				</dependency>
-			</dependencies>
 		</profile>
 
 		<profile>
