@@ -1,6 +1,7 @@
 package soap;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.jws.WebMethod;
@@ -9,22 +10,68 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
-import javax.ws.rs.core.Response;
 
+import api.HomeApi;
+import api.ItemApi;
 import api.OrderApi;
 import api.RegistrationApi;
 import api.ShoppingCartApi;
 import exception.BookstoreException;
+import rn.ItemRn;
 import rn.OrderRn;
+import util.EnumSearchType;
 
-@WebService(name = "order")
+@WebService
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL)
-public class OrderService {
+public class Service {
+	
+	@Inject 
+	ItemRn itemRn;
 	
 	@Inject
 	OrderRn orderRn;
+		
+	/**
+	 * Search
+	 */
+	@WebMethod
+	public List<ItemApi> search(@WebParam(name = "searchType") EnumSearchType searchType, @WebParam(name = "searchText") String searchText){
+		return itemRn.search(searchType, searchText);
+	}
+		
+	/**
+	 * Home
+	 */
+	@WebMethod
+	public HomeApi home(@WebParam(name = "token") Long token){
+		return itemRn.home(token);
+	}
 	
 	/**
+	 * Best Sellers
+	 */
+	@WebMethod
+	public List<ItemApi> bestSellers(@WebParam(name = "subject") String subject){
+		return itemRn.bestSellers(subject);
+	}
+	
+	/**
+	 * New Products
+	 */
+	@WebMethod
+	public List<ItemApi> newProducts(@WebParam(name = "subject") String subject){
+		return itemRn.newProducts(subject);
+	}
+	
+	/**
+	 * Product Detail
+	 */
+	@WebMethod
+	public ItemApi productDetail(@WebParam(name = "id") Long id) {
+		return itemRn.productDetail(id);
+	}
+	
+	/**	
 	 * Customer Registration
 	 */
 	@WebMethod
@@ -56,5 +103,5 @@ public class OrderService {
 	public OrderApi orderDisplay(@WebParam(name = "token") Long token) throws BookstoreException {
 		return orderRn.displayOrder(token);
 	}
-	
+
 }
