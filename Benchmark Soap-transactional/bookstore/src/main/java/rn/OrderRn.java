@@ -44,7 +44,8 @@ public class OrderRn {
 	 * Register an user by performing log in. Returns customer's token.
 	 */
 	public Long customerRegistration(Boolean returningCustomer, String username, String password, 
-			RegistrationApi registration) throws BookstoreException{
+			RegistrationApi registration) throws BookstoreException{	
+		System.out.println("------customer registration");
 		Customer customer;
 		if(returningCustomer) {
 			customer = customerDao.fetchCustomer(username);
@@ -87,7 +88,8 @@ public class OrderRn {
 	 * Adds product to shopping cart. 
 	 * (*needs registration*)
 	 */
-	public ShoppingCartApi shoppingCart(Long token, Boolean addFlag, HashMap<Long, Integer> items) throws BookstoreException {
+	public ShoppingCartApi shoppingCart(Long token, Boolean addFlag, HashMap<Long, Integer> items) throws BookstoreException {	
+		System.out.println("------shopping cart");
 		ShoppingSession session = getCustomerSession(token);
 		if(session == null) {
 			throw new BookstoreException(BookstoreExceptionMessages.BOOK_1.getMessage());
@@ -129,7 +131,8 @@ public class OrderRn {
 	 * Process a buy request and shows the buy confirmation. 
 	 * (*needs registration*)
 	 */
-	public OrderApi buyConfirm(Long token) throws BookstoreException {
+	public OrderApi buyConfirm(Long token) throws BookstoreException {	
+		System.out.println("------buy confirm");
 		ShoppingSession session = orderDao.searchShoppingSessionByCustomer(token);
 		if(session == null) {
 			throw new BookstoreException(BookstoreExceptionMessages.BOOK_1.getMessage());
@@ -165,7 +168,8 @@ public class OrderRn {
 	 * Displays the order details.
 	 * (*needs registration*)
 	 */
-	public OrderApi displayOrder(Long token) throws BookstoreException {
+	public OrderApi displayOrder(Long token) throws BookstoreException {	
+		System.out.println("------order display");
 		ShoppingSession session = getCustomerSession(token);
 		if(session == null) {
 			throw new BookstoreException(BookstoreExceptionMessages.BOOK_1.getMessage());
