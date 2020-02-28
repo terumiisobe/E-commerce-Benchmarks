@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateful;
@@ -46,7 +47,7 @@ public class ItemDao {
 			query.setMaxResults(50);
 			return query.getResultList();
 		} catch(NoResultException e) {
-			return null;
+			return new ArrayList<>();
 		}
 	}
 	
