@@ -58,8 +58,7 @@ public class OrderRest {
 	 */
 	@GET
 	public OrderApi orderDisplay(@QueryParam("token") Long token) throws BookstoreException {
-		orderRn.displayOrder(token);
-		return null;
+		return orderRn.displayOrder(token);
 	}
 	
 }
