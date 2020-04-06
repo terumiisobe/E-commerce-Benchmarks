@@ -72,6 +72,8 @@ public class OrderRn {
 		shoppingSession.setCart(new ArrayList<>());
 		orderDao.persistShoppingSession(shoppingSession);
 		
+		System.out.println("------customer registration: " + shoppingSession.getCustomerId());
+
 		return shoppingSession.getCustomerId();
 	}
 	
@@ -88,6 +90,7 @@ public class OrderRn {
 	 * (*needs registration*)
 	 */
 	public ShoppingCartApi shoppingCart(Long token, Boolean addFlag, HashMap<Long, Integer> items) throws BookstoreException {
+		System.out.println("------shopping cart: " + token.toString());
 		ShoppingSession session = getCustomerSession(token);
 		if(session == null) {
 			throw new BookstoreException(BookstoreExceptionMessages.BOOK_1.getMessage());
@@ -130,6 +133,7 @@ public class OrderRn {
 	 * (*needs registration*)
 	 */
 	public OrderApi buyConfirm(Long token) throws BookstoreException {
+		System.out.println("------buy confirm: " + token.toString());
 		ShoppingSession session = orderDao.searchShoppingSessionByCustomer(token);
 		if(session == null) {
 			throw new BookstoreException(BookstoreExceptionMessages.BOOK_1.getMessage());
@@ -166,6 +170,7 @@ public class OrderRn {
 	 * (*needs registration*)
 	 */
 	public OrderApi displayOrder(Long token) throws BookstoreException {
+		System.out.println("------order display: " + token.toString());
 		ShoppingSession session = getCustomerSession(token);
 		if(session == null) {
 			throw new BookstoreException(BookstoreExceptionMessages.BOOK_1.getMessage());
