@@ -11,9 +11,9 @@ INSERT INTO author(id, fullName) VALUES (3, 'J. R. R. Tolkien');
 INSERT INTO author(id, fullName) VALUES (4, 'John Green');
 INSERT INTO author(id, fullName) VALUES (5, 'Stephen King');
 
-INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (1, 'The Name of the Wind', 1,'SCIENCE FICTION', NULL, CURRENT_TIMESTAMP, 80, 150);
-INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (2, 'The Game of Thrones', 2,'SCIENCE FICTION', NULL, CURRENT_TIMESTAMP, 90, 100);
-INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (3, 'Lord of the Rings', 3,'SCIENCE FICTION', NULL, CURRENT_TIMESTAMP, 80, 500);
-INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (4, 'The Fault in our Stars', 4, 'ROMANCE', NULL, CURRENT_TIMESTAMP, 50, 200);
-INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (5, 'Paper Towns', 4, 'ROMANCE', NULL, CURRENT_TIMESTAMP, 30, 3000);
-INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (6, 'It', 5, 'HORROR', NULL, CURRENT_TIMESTAMP, 70, 1000);
+INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (1, 'The Name of the Wind', 1,'SCIENCE FICTION', NULL, CURRENT_TIMESTAMP, 80, 15000);
+INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (2, 'The Game of Thrones', 2,'SCIENCE FICTION', NULL, CURRENT_TIMESTAMP, 90, 10000);
+INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (3, 'Lord of the Rings', 3,'SCIENCE FICTION', NULL, CURRENT_TIMESTAMP, 80, 50000);
+INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (4, 'The Fault in our Stars', 4, 'ROMANCE', NULL, CURRENT_TIMESTAMP, 50, 20000);
+INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (5, 'Paper Towns', 4, 'ROMANCE', NULL, CURRENT_TIMESTAMP, 30, 300000);
+INSERT INTO item (id, title, authorId, subject, publisher, publicationDate, cost, availability) VALUES (6, 'It', 5, 'HORROR', NULL, CURRENT_TIMESTAMP, 70, 100000);
