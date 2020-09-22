@@ -18,7 +18,7 @@ public class Customer {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@Column(unique = true, nullable = false)
+	@GeneratedValue
 	private String username;
 	@NotNull
 	private String password;

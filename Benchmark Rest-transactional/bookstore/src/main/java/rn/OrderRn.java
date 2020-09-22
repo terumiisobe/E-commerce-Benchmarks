@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.faces.component.UpdateModelException;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import api.ItemQuantityApi;
@@ -26,6 +26,7 @@ import util.EnumOrderStatus;
 import util.ItemQuantity;
 import util.ShoppingSession;
 
+@Stateless
 public class OrderRn {
 	
 	@Inject 
@@ -56,7 +57,7 @@ public class OrderRn {
 		}
 		else{
 			customer = new Customer();
-			customer.setUsername(Long.toString(System.currentTimeMillis()));
+			//customer.setUsername(Long.toString(System.currentTimeMillis()));
 			customer.setPassword("password");
 			customer.setFullName(registration.getFullName());
 			customer.setAddress(registration.getAddress());
