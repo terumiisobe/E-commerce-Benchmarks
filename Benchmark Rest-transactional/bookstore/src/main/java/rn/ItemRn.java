@@ -3,6 +3,7 @@ package rn;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import api.HomeApi;
@@ -15,6 +16,7 @@ import model.Item;
 import util.EnumSearchType;
 import util.ShoppingSession;
 
+@Stateless
 public class ItemRn {
 	
 	@Inject 
