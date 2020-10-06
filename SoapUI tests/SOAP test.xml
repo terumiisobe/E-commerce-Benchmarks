@@ -1026,4 +1026,4 @@ declare namespace ns1='http://soap/';
          <return>1000</return>
       </ns2:customerRegistrationResponse>
    </soap:Body>
-</soap:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://soap/Service/customerRegistrationResponse"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:endpointStrategy/><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</soap:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://soap/Service/customerRegistrationResponse"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
