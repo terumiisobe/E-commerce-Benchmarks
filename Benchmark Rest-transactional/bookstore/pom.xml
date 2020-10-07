@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.terumi.isobe.bookstore</groupId>
-	<artifactId>bookstore</artifactId>
+	<artifactId>bookstore-rest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Bookstore</name>
@@ -191,6 +191,20 @@
 		    <groupId>javax.transaction</groupId>
 		    <artifactId>javax.transaction-api</artifactId>
 		    <version>1.2</version>
+		</dependency>
+		
+		<!-- API, java.xml.bind module -->
+		<dependency>
+		    <groupId>jakarta.xml.bind</groupId>
+		    <artifactId>jakarta.xml.bind-api</artifactId>
+		    <version>2.3.2</version>
+		</dependency>
+		
+		<!-- Runtime, com.sun.xml.bind module -->
+		<dependency>
+		    <groupId>org.glassfish.jaxb</groupId>
+		    <artifactId>jaxb-runtime</artifactId>
+		    <version>2.3.2</version>
 		</dependency>
 		
 	</dependencies>
