@@ -3,13 +3,14 @@ package rest;
 import java.util.HashMap;
 
 import javax.inject.Inject;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+
 import javax.ws.rs.core.Response;
 
 import api.OrderApi;
@@ -39,7 +40,7 @@ public class OrderRest {
 	 * Shopping Cart 
 	 */
 	@PUT
-	public Response shoppingCart(@QueryParam("token") Long token, @QueryParam("addFlag") Boolean addFlag, HashMap<Long, Integer> item) throws BookstoreException {
+	public Response shoppingCart(@QueryParam("token") Long token, @QueryParam("addFlag") @DefaultValue("true") Boolean addFlag, HashMap<Long, Integer> item) throws BookstoreException {
 		ShoppingCartApi api = orderRn.shoppingCart(token, addFlag, item);
 		return Response.status(Response.Status.OK).entity(api).build();
 	}
@@ -47,7 +48,8 @@ public class OrderRest {
 	/**
 	 * Buy Confirm
 	 */
-	@POST 
+	@POST
+	@Path("/confirm")
 	public Response buyConfirm(@QueryParam("token") Long token) throws BookstoreException {
 		OrderApi api = orderRn.buyConfirm(token);
 		return Response.status(Response.Status.OK).entity(api).build();
@@ -57,6 +59,7 @@ public class OrderRest {
 	 * Order Display
 	 */
 	@GET
+	@Path("/display")
 	public OrderApi orderDisplay(@QueryParam("token") Long token) throws BookstoreException {
 		return orderRn.displayOrder(token);
 	}
