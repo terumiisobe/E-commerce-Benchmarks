@@ -159,7 +159,6 @@ public class OrderRn {
 			line.setItem(item);
 			orderDao.persistOrderLine(line);
 		}
-		decreaseAvailability(session.getCart());
 		session.getCart().clear();
 		session.setTotalPrice(new BigDecimal(0));
 		orderDao.updateShoppingSession(session);
