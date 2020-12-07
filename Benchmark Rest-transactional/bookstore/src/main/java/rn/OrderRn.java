@@ -58,7 +58,7 @@ public class OrderRn {
 		}
 		else{
 			customer = new Customer();
-			customer.setUsername(Long.toString(System.currentTimeMillis()));
+			//customer.setUsername(Long.toString(System.currentTimeMillis()));
 			customer.setPassword("password");
 			customer.setFullName(registration.getFullName());
 			customer.setAddress(registration.getAddress());
