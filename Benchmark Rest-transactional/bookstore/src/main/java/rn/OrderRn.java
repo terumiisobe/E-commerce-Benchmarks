@@ -2,6 +2,7 @@ package rn;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +58,7 @@ public class OrderRn {
 		}
 		else{
 			customer = new Customer();
-			//customer.setUsername(Long.toString(System.currentTimeMillis()));
+			customer.setUsername(Long.toString(System.currentTimeMillis()));
 			customer.setPassword("password");
 			customer.setFullName(registration.getFullName());
 			customer.setAddress(registration.getAddress());
@@ -159,7 +160,6 @@ public class OrderRn {
 			line.setItem(item);
 			orderDao.persistOrderLine(line);
 		}
-		decreaseAvailability(session.getCart());
 		session.getCart().clear();
 		session.setTotalPrice(new BigDecimal(0));
 		orderDao.updateShoppingSession(session);
