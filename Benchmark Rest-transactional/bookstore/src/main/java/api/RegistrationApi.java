@@ -2,8 +2,11 @@ package api;
 
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import model.Address;
 
+@XmlRootElement
 public class RegistrationApi {
 	private String fullName;
 	private Address address;

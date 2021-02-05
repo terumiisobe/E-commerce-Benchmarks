@@ -2,6 +2,9 @@ package api;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class HomeApi {
 	private String customerName;
 	private List<String> whatsNew;
