@@ -3,6 +3,7 @@ package rest;
 import java.util.HashMap;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,7 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import api.OrderApi;
@@ -20,7 +21,8 @@ import exception.BookstoreException;
 import rn.OrderRn;
 
 @Path("/order")
-@Produces("application/json")
+@Consumes(MediaType.APPLICATION_XML)
+@Produces(MediaType.APPLICATION_XML)
 public class OrderRest {
 	
 	@Inject
@@ -31,9 +33,9 @@ public class OrderRest {
 	 */
 	@POST
 	@Path("/register")
-	public Long customerRegistration(@QueryParam("returningCustomer") Boolean returningCustomer, 
+	public Response customerRegistration(@QueryParam("returningCustomer") Boolean returningCustomer, 
 			@QueryParam("username") String username, @QueryParam("password") String password, RegistrationApi registration) throws BookstoreException {
-		return orderRn.customerRegistration(returningCustomer, username, password, registration);
+		return Response.status(200).type(MediaType.APPLICATION_XML).entity(orderRn.customerRegistration(returningCustomer, username, password, registration).toString()).build();
 	}
 	
 	/**

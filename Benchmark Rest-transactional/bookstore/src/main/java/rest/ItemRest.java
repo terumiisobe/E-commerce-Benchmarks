@@ -3,6 +3,7 @@ package rest;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -16,7 +17,8 @@ import rn.ItemRn;
 import util.EnumSearchType;
 
 @Path("/item")
-@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_XML)
+@Produces(MediaType.APPLICATION_XML)
 public class ItemRest {
 	
 	@Inject 
