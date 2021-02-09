@@ -90,7 +90,7 @@ public class OrderRn {
 	 * Adds product to shopping cart. 
 	 * (*needs registration*)
 	 */
-	public ShoppingCartApi shoppingCart(Long token, Boolean addFlag, HashMap<Long, Integer> items) throws BookstoreException {	
+	public ShoppingCartApi shoppingCart(Long token, Boolean addFlag, ItemQuantityApi item) throws BookstoreException {	
 		System.out.println("------shopping cart: " + token.toString());
 		ShoppingSession session = getCustomerSession(token);
 		if(session == null) {
@@ -98,27 +98,26 @@ public class OrderRn {
 		}
 		// if ADD and the cart is not full
 		if(addFlag && session.getCart().size() < 100) {
-			for(Long itemId : items.keySet()) {
-				if(itemDao.searchById(itemId).getAvailability() <= 0) {
-					throw new BookstoreException(BookstoreExceptionMessages.BOOK_4.getMessage());
-				}
-				List<ItemQuantity> list = session.getCart();
-				Boolean itemExist = false;
-				for(ItemQuantity iq : list) {
-					// if item already exists in cart
-					if(iq.getItemId() == itemId) {
-						iq.setQuantity(items.get(itemId));
-						itemExist = true;
-					}
-				}
-				//if item doesn't exist in cart
-				if(!itemExist) {
-					ItemQuantity newItem = new ItemQuantity();
-					newItem.setItemId(itemDao.searchById(itemId).getId());
-					newItem.setQuantity(items.get(itemId));
-					session.getCart().add(newItem);
+			if(itemDao.searchById(item.getItem().getId()).getAvailability() <= 0) {
+				throw new BookstoreException(BookstoreExceptionMessages.BOOK_4.getMessage());
+			}
+			List<ItemQuantity> list = session.getCart();
+			Boolean itemExist = false;
+			for(ItemQuantity iq : list) {
+				// if item already exists in cart
+				if(iq.getItemId() == item.getItem().getId()) {
+					iq.setQuantity(item.getQuantity());
+					itemExist = true;
 				}
 			}
+			//if item doesn't exist in cart
+			if(!itemExist) {
+				ItemQuantity newItem = new ItemQuantity();
+				newItem.setItemId(itemDao.searchById(item.getItem().getId()).getId());
+				newItem.setQuantity(item.getQuantity());
+				session.getCart().add(newItem);
+			}
+				
 			session.setTotalPrice(calculateTotalPrice(session.getCart()));
 			orderDao.updateShoppingSession(session);
 		}

@@ -1,6 +1,7 @@
 package rest;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -14,6 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import api.ItemQuantityApi;
 import api.OrderApi;
 import api.RegistrationApi;
 import api.ShoppingCartApi;
@@ -42,7 +44,7 @@ public class OrderRest {
 	 * Shopping Cart 
 	 */
 	@PUT
-	public Response shoppingCart(@QueryParam("token") Long token, @QueryParam("addFlag") @DefaultValue("true") Boolean addFlag, HashMap<Long, Integer> item) throws BookstoreException {
+	public Response shoppingCart(@QueryParam("token") Long token, @QueryParam("addFlag") @DefaultValue("true") Boolean addFlag, ItemQuantityApi item) throws BookstoreException {
 		ShoppingCartApi api = orderRn.shoppingCart(token, addFlag, item);
 		return Response.status(Response.Status.OK).entity(api).build();
 	}

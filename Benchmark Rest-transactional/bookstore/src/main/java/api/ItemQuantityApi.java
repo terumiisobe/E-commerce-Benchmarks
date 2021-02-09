@@ -1,7 +1,10 @@
 package api;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import api.ItemApi;
 
+@XmlRootElement
 public class ItemQuantityApi {
 	private ItemApi item;
 	private Integer quantity;

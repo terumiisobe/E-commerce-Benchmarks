@@ -1,6 +1,5 @@
 package soap;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,6 +12,7 @@ import javax.jws.soap.SOAPBinding.Use;
 
 import api.HomeApi;
 import api.ItemApi;
+import api.ItemQuantityApi;
 import api.OrderApi;
 import api.RegistrationApi;
 import api.ShoppingCartApi;
@@ -84,7 +84,7 @@ public class Service {
 	 * Shopping Cart 
 	 */
 	@WebMethod
-	public ShoppingCartApi shoppingCart(@WebParam(name = "token") Long token, @WebParam(name = "addFlag") Boolean addFlag, @WebParam(name = "item") HashMap<Long, Integer> item) throws BookstoreException {
+	public ShoppingCartApi shoppingCart(@WebParam(name = "token") Long token, @WebParam(name = "addFlag") Boolean addFlag, @WebParam(name = "itemQuantity") ItemQuantityApi item) throws BookstoreException {
 		return orderRn.shoppingCart(token, addFlag, item);
 	}
 	
